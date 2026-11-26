@@ -21,3 +21,5 @@ jobs:
       - run: node scripts/notify.mjs
         env:
           TOPIC_PREFIX: kora-7b7b89cd4bfe
+
+# touch: re-register schedule
