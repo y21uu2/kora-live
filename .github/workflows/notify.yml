@@ -1,0 +1,23 @@
+name: kora-notify
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # GitHub may delay or skip scheduled runs; best effort only
+  workflow_dispatch:
+concurrency: { group: kora-notify, cancel-in-progress: false }
+permissions: { contents: read }
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/cache@v4
+        with:
+          path: state.json
+          key: kora-state-${{ github.run_id }}
+          restore-keys: kora-state-
+      - run: node scripts/notify.mjs
+        env:
+          TOPIC_PREFIX: kora-7b7b89cd4bfe
