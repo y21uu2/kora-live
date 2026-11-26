@@ -1,7 +1,7 @@
 name: kora-notify
 on:
   schedule:
-    - cron: '*/5 * * * *'   # GitHub may delay or skip scheduled runs; best effort only
+    - cron: '7,22,37,52 * * * *'   # GitHub may delay or skip scheduled runs; best effort only
   workflow_dispatch:
 concurrency: { group: kora-notify, cancel-in-progress: false }
 permissions: { contents: read }
