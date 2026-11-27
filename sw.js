@@ -1,4 +1,4 @@
-const V='kora-v25',SHELL=['./','./app.js','./app.css','./manifest.webmanifest'];
+const V='kora-v26',SHELL=['./','./app.js','./app.css','./manifest.webmanifest'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
