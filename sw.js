@@ -1,4 +1,4 @@
-const V='kora-v35',SHELL=['./','./app.js','./app.css','./manifest.webmanifest'];
+const V='kora-v36',SHELL=['./','./app.js','./app.css','./manifest.webmanifest'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
@@ -12,3 +12,7 @@ self.addEventListener('fetch',e=>{
   // data APIs: network first, last good copy when offline
   e.respondWith(fetch(r).then(x=>{if(x.ok){const y=x.clone();caches.open(V).then(c=>c.put(r,y))}return x})
     .catch(()=>caches.match(r).then(m=>m||new Response('{}',{status:503,headers:{'content-type':'application/json'}}))))});
+self.addEventListener('push',e=>{let d={};try{d=e.data?e.data.json():{}}catch(_){}
+  e.waitUntil(self.registration.showNotification(d.title||'كورة لحظة بلحظة',{body:d.body||'',icon:'./icon-192.png',badge:'./icon-192.png',dir:'rtl',lang:'ar',tag:d.tag||undefined,data:{url:d.url||'./'}}))});
+self.addEventListener('notificationclick',e=>{e.notification.close();const u=new URL((e.notification.data&&e.notification.data.url)||'./',self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l){if('focus' in c)return c.focus()}return self.clients.openWindow(u)}))});
